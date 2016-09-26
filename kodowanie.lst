@@ -1,0 +1,302 @@
+     1                                  section	.text
+     2                                  global  kodowanie
+     3                                  
+     4                                  kodowanie:
+     5 00000000 55                      	push ebp
+     6 00000001 89E5                    	mov	ebp, esp
+     7 00000003 6A00                    	push 0
+     8 00000005 6A00                    	push 0
+     9 00000007 6A00                    	push 0
+    10                                  
+    11                                  	
+    12 00000009 8B7D08                  	mov edi, [ebp+8]
+    13 0000000C 8B4D0C                  	mov ecx, [ebp+12]
+    14 0000000F 8B4510                  	mov eax, [ebp+16]
+    15 00000012 8B5808                  	mov ebx, [eax+8]
+    16 00000015 895DFC                  	mov [ebp-4], ebx	;pierwszy obrot
+    17                                  
+    18 00000018 8B580C                  	mov ebx, [eax+12]
+    19 0000001B 895DF8                  	mov [ebp-8], ebx	;drugi obrot
+    20                                  
+    21 0000001E 8B5810                  	mov ebx, [eax+16]
+    22 00000021 895DF4                  	mov [ebp-12], ebx	;trzeci obrot
+    23                                  
+    24                                  
+    25                                  
+    26                                  przechodz:
+    27 00000024 8A1F                    	mov bl, [edi]
+    28 00000026 80FB00                  	cmp bl, 0
+    29 00000029 0F840F010000            	jz koniec
+    30                                  
+    31 0000002F 80FB41                  	cmp bl, 65
+    32 00000032 0F8C38010000            	jl przepusc	
+    33                                  
+    34 00000038 80FB5B                  	cmp bl, 91
+    35 0000003B 0F8D3A010000            	jge przepusc1
+    36                                  
+    37 00000041 80EB41                  	sub bl, 65
+    38                                  ;zapomietac numer 1-j pozycji
+    39                                  
+    40 00000044 8A55FC                  	mov dl, [ebp-4]		; z przesunieciem
+    41 00000047 00D3                    	add bl, dl
+    42                                  
+    43 00000049 80FB1A                  	cmp bl, 26
+    44 0000004C 0F8DAB010000            	jge modulo1
+    45                                  
+    46                                  modulo1_powr:
+    47 00000052 885DF0                  	mov [ebp-16], bl
+    48 00000055 8B4510                  	mov eax, [ebp+16]
+    49 00000058 8B18                    	mov ebx, [eax]
+    50 0000005A B800000000              	mov eax, 0
+    51 0000005F 8A45F0                  	mov al, [ebp-16]
+    52 00000062 8A1C83                  	mov bl, [ebx+4*eax]	;numer miejsca rotora nr2
+    53                                  ;	mov [ebp-20], bl
+    54                                  
+    55                                  
+    56 00000065 80C31A                  	add bl, 26
+    57                                  
+    58 00000068 8A55F8                  	mov dl, [ebp-8]		; z przesunieciem
+    59 0000006B 00D3                    	add bl, dl
+    60                                  	
+    61 0000006D 80FB34                  	cmp bl, 52
+    62 00000070 0F8D8F010000            	jge modulo2
+    63                                  
+    64                                  modulo2_powr:
+    65 00000076 885DF0                  	mov [ebp-16], bl
+    66 00000079 8B4510                  	mov eax, [ebp+16]
+    67 0000007C 8B18                    	mov ebx, [eax]
+    68 0000007E B800000000              	mov eax, 0
+    69 00000083 8A45F0                  	mov al, [ebp-16]
+    70 00000086 8A1C83                  	mov bl, [ebx+4*eax]	;numer miejsca rotora nr3
+    71                                  ;	mov [ebp-20], bl
+    72                                  	
+    73 00000089 80C334                  	add bl, 52	
+    74                                  
+    75 0000008C 8A55F4                  	mov dl, [ebp-12]		; z przesunieciem
+    76 0000008F 00D3                    	add bl, dl
+    77                                  
+    78 00000091 80FB4E                  	cmp bl, 78
+    79 00000094 0F8D73010000            	jge modulo3
+    80                                  
+    81                                  modulo3_powr:
+    82                                  	
+    83 0000009A 885DF0                  	mov [ebp-16], bl
+    84 0000009D 8B4510                  	mov eax, [ebp+16]
+    85 000000A0 8B18                    	mov ebx, [eax]
+    86 000000A2 B800000000              	mov eax, 0
+    87 000000A7 8A45F0                  	mov al, [ebp-16]
+    88 000000AA 8A1C83                  	mov bl, [ebx+4*eax]	;numer miejsca rotora obroc
+    89                                  ;	mov [ebp-20], bl
+    90                                  
+    91                                  
+    92 000000AD 80C34E                  	add bl, 78
+    93 000000B0 885DF0                  	mov [ebp-16], bl
+    94 000000B3 8B4510                  	mov eax, [ebp+16]
+    95 000000B6 8B18                    	mov ebx, [eax]
+    96 000000B8 B800000000              	mov eax, 0
+    97 000000BD 8A45F0                  	mov al, [ebp-16]
+    98 000000C0 8A1C83                  	mov bl, [ebx+4*eax]	;numer miejsca rotora nr3 z powrotem
+    99                                  ;	mov [ebp-20], bl
+   100                                  
+   101 000000C3 8A55F4                  	mov dl, [ebp-12]		; z przesunieciem
+   102 000000C6 28D3                    	sub bl, dl 	
+   103                                  
+   104                                  
+   105 000000C8 80FB00                  	cmp bl, 0
+   106 000000CB 0F8C44010000            	jl zmien1
+   107                                  
+   108                                  zmien1_powr:
+   109                                  
+   110 000000D1 885DF0                  	mov [ebp-16], bl
+   111 000000D4 8B4510                  	mov eax, [ebp+16]
+   112 000000D7 8B5804                  	mov ebx, [eax+4]
+   113 000000DA B800000000              	mov eax, 0
+   114 000000DF 8A45F0                  	mov al, [ebp-16]
+   115 000000E2 8A1C83                  	mov bl, [ebx+4*eax]	;numer miejsca rotora nr2 z powrotem
+   116                                  ;	mov [ebp-20], bl
+   117                                  
+   118                                  
+   119 000000E5 8A55F8                  	mov dl, [ebp-8]		; z przesunieciem
+   120 000000E8 28D3                    	sub bl, dl 	
+   121                                  
+   122 000000EA 80FB00                  	cmp bl, 0
+   123 000000ED 0F8C2A010000            	jl zmien2
+   124                                  
+   125                                  zmien2_powr:
+   126                                  	
+   127 000000F3 80C31A                  	add bl, 26
+   128 000000F6 885DF0                  	mov [ebp-16], bl
+   129 000000F9 8B4510                  	mov eax, [ebp+16]
+   130 000000FC 8B5804                  	mov ebx, [eax+4]
+   131 000000FF B800000000              	mov eax, 0
+   132 00000104 8A45F0                  	mov al, [ebp-16]
+   133 00000107 8A1C83                  	mov bl, [ebx+4*eax]	;numer miejsca rotora nr1 z powrotem
+   134                                  ;	mov [ebp-20], bl
+   135                                  	
+   136 0000010A 8A55FC                  	mov dl, [ebp-4]		; z przesunieciem
+   137 0000010D 28D3                    	sub bl, dl 	
+   138                                  	
+   139 0000010F 80FB00                  	cmp bl, 0
+   140 00000112 0F8C0D010000            	jl zmien3
+   141                                  
+   142                                  zmien3_powr:
+   143                                  
+   144 00000118 80C334                  	add bl, 52
+   145                                  	
+   146 0000011B 885DF0                  	mov [ebp-16], bl
+   147 0000011E 8B4510                  	mov eax, [ebp+16]
+   148 00000121 8B5804                  	mov ebx, [eax+4]
+   149 00000124 B800000000              	mov eax, 0
+   150 00000129 8A45F0                  	mov al, [ebp-16]
+   151 0000012C 8A1C83                  	mov bl, [ebx+4*eax]	;liczba	
+   152 0000012F 80C341                  	add bl, 65
+   153                                  
+   154                                  zapisz:
+   155 00000132 885DEC                  	mov [ebp-20], bl
+   156                                  
+   157 00000135 8A5DEC                  	mov bl, [ebp-20]
+   158 00000138 8819                    	mov [ecx], bl
+   159 0000013A 41                      	inc ecx
+   160 0000013B 47                      	inc edi
+   161 0000013C EB48                    	jmp rotate
+   162                                  	;jmp przechodz
+   163                                  
+   164                                  
+   165                                  koniec:
+   166 0000013E B300                    	mov bl, 0
+   167 00000140 B30D                    	mov bl, 13
+   168 00000142 8819                    	mov [ecx], bl
+   169 00000144 41                      	inc ecx
+   170 00000145 B30A                    	mov bl, 10
+   171 00000147 8819                    	mov [ecx], bl
+   172 00000149 41                      	inc ecx
+   173 0000014A B300                    	mov bl, 0
+   174 0000014C 8819                    	mov [ecx], bl
+   175                                  	
+   176                                  
+   177 0000014E 894D0C                  	mov [ebp+12], ecx
+   178                                  	
+   179 00000151 8B5DFC                  	mov ebx, [ebp-4]
+   180 00000154 8B4510                  	mov eax, [ebp+16]
+   181 00000157 895808                  	mov [eax+8],ebx
+   182                                  
+   183 0000015A 8B5DF8                  	mov ebx, [ebp-8]
+   184 0000015D 8B4510                  	mov eax, [ebp+16]
+   185 00000160 89580C                  	mov [eax+12],ebx
+   186                                  
+   187 00000163 8B5DF4                  	mov ebx, [ebp-12]
+   188 00000166 8B4510                  	mov eax, [ebp+16]
+   189 00000169 895810                  	mov [eax+16],ebx
+   190                                  
+   191                                  	;mov ebp, ebx
+   192                                  	
+   193 0000016C 89EC                    	mov esp, ebp
+   194 0000016E 5D                      	pop	ebp
+   195 0000016F C3                      	ret
+   196                                  	
+   197                                  przepusc:
+   198                                  
+   199 00000170 80FB20                  	cmp bl, 32
+   200 00000173 7DBD                    	jge zapisz
+   201                                  	
+   202 00000175 47                      	inc edi
+   203 00000176 E9A9FEFFFF              	jmp przechodz
+   204                                  
+   205                                  przepusc1:
+   206                                  
+   207 0000017B 80FB60                  	cmp bl, 96
+   208 0000017E 7CB2                    	jl zapisz
+   209                                  	
+   210 00000180 47                      	inc edi
+   211 00000181 E99EFEFFFF              	jmp przechodz
+   212                                  
+   213                                  rotate:
+   214                                  
+   215 00000186 BB00000000              	mov ebx, 0
+   216 0000018B 8A5DFC                  	mov bl, [ebp-4]
+   217 0000018E 80FB00                  	cmp bl, 0
+   218 00000191 751C                    	jne countt4
+   219                                  
+   220 00000193 BB00000000              	mov ebx, 0
+   221 00000198 8A5DF8                  	mov bl, [ebp-8]
+   222 0000019B 80FB00                  	cmp bl, 0
+   223 0000019E 751F                    	jne countt5
+   224                                  
+   225 000001A0 BB00000000              	mov ebx, 0
+   226 000001A5 8A5DF4                  	mov bl, [ebp-12]
+   227 000001A8 80FB00                  	cmp bl, 0
+   228 000001AB 7522                    	jne countt6
+   229                                  
+   230 000001AD EB00                    	jmp countt4
+   231                                  
+   232                                  countt4:
+   233                                  
+   234 000001AF 80C301                  	add bl, 1
+   235 000001B2 80FB19                  	cmp bl, 25
+   236 000001B5 7428                    	je zamient4_na0
+   237 000001B7 885DFC                  	mov [ebp-4], bl
+   238 000001BA E965FEFFFF              	jmp przechodz
+   239                                  
+   240                                  countt5:
+   241                                  
+   242 000001BF 80C301                  	add bl, 1
+   243 000001C2 80FB19                  	cmp bl, 25
+   244 000001C5 7422                    	je zamient5_na0
+   245 000001C7 885DF8                  	mov [ebp-8], bl
+   246 000001CA E955FEFFFF              	jmp przechodz
+   247                                  
+   248                                  countt6:
+   249                                  
+   250 000001CF 80C301                  	add bl, 1
+   251 000001D2 80FB19                  	cmp bl, 25
+   252 000001D5 741C                    	je zamient6_na0
+   253 000001D7 885DF4                  	mov [ebp-12], bl
+   254 000001DA E945FEFFFF              	jmp przechodz
+   255                                  
+   256                                  zamient4_na0:
+   257                                  	
+   258 000001DF B300                    	mov bl, 0
+   259 000001E1 885DFC                  	mov [ebp-4], bl
+   260 000001E4 E93BFEFFFF              	jmp przechodz
+   261                                  
+   262                                  zamient5_na0:
+   263                                  	
+   264 000001E9 B300                    	mov bl, 0
+   265 000001EB 885DF8                  	mov [ebp-8], bl
+   266 000001EE E931FEFFFF              	jmp przechodz
+   267                                  
+   268                                  zamient6_na0:
+   269                                  	
+   270 000001F3 B300                    	mov bl, 0
+   271 000001F5 885DF4                  	mov [ebp-12], bl
+   272 000001F8 E927FEFFFF              	jmp przechodz
+   273                                  
+   274                                  modulo1:
+   275                                  
+   276 000001FD 80EB1A                  	sub bl, 26
+   277 00000200 E94DFEFFFF              	jmp modulo1_powr
+   278                                  
+   279                                  modulo2:
+   280                                  
+   281 00000205 80EB1A                  	sub bl, 26
+   282 00000208 E969FEFFFF              	jmp modulo2_powr
+   283                                  
+   284                                  modulo3:
+   285                                  
+   286 0000020D 80EB1A                  	sub bl, 26
+   287 00000210 E985FEFFFF              	jmp modulo3_powr
+   288                                  
+   289                                  zmien1:
+   290                                  
+   291 00000215 80C31A                  	add bl, 26
+   292 00000218 E9B4FEFFFF              	jmp zmien1_powr
+   293                                  
+   294                                  zmien2:
+   295                                  
+   296 0000021D 80C31A                  	add bl, 26
+   297 00000220 E9CEFEFFFF              	jmp zmien2_powr
+   298                                  
+   299                                  zmien3:
+   300                                  
+   301 00000225 80C31A                  	add bl, 26
+   302 00000228 E9EBFEFFFF              	jmp zmien3_powr
